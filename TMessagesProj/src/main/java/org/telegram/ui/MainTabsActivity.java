@@ -414,9 +414,17 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
     private boolean openFoldersSelector(View anchor) {
         if (getContext() == null || getParentActivity() == null) return false;
         final ArrayList<MessagesController.DialogFilter> filters = getMessagesController().getDialogFilters();
-        if (filters == null || filters.size() <= 1) return false;
+        if (filters == null || filters.size() <= 1) {
+            BackButtonMenuRecent.show(currentAccount, this, anchor, null);
+            return true;
+        }
 
         final ItemOptions o = ItemOptions.makeOptions(this, anchor);
+        o.add(R.drawable.msg_recent, getString(R.string.RecentChats), () -> {
+            o.dismiss();
+            BackButtonMenuRecent.show(currentAccount, this, anchor, null);
+        });
+        o.addGap();
         for (int i = 0; i < filters.size(); i++) {
             final MessagesController.DialogFilter folder = filters.get(i);
             final ActionBarMenuSubItem folderItem = new ActionBarMenuSubItem(getParentActivity(), 2, false, false, getResourceProvider());
