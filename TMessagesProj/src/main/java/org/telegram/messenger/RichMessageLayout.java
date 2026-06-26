@@ -1924,9 +1924,9 @@ public class RichMessageLayout {
                 return AndroidUtilities.bold();
             } else if (block >= 1 && block <= 6) {
                 if (hasFlag(flags, TEXT_FLAG_ITALIC)) {
-                    return AndroidUtilities.getTypeface("fonts/mw_bolditalic.ttf");
+                    return AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM_ITALIC);
                 }
-                return AndroidUtilities.getTypeface("fonts/mw_bold.ttf");
+                return AndroidUtilities.bold();
             } else if (hasFlag(flags, TEXT_FLAG_MONO)) {
                 return Typeface.MONOSPACE;
             }

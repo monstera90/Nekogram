@@ -74,11 +74,11 @@ public class TextStyleSpan extends MetricAffectingSpan {
                 p.setFlags(p.getFlags() &~ Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-            if ((flags & FLAG_STYLE_BOLD) != 0 && !TypefaceHelper.isMediumWeightSupported()) {
+            if (!header && (flags & FLAG_STYLE_BOLD) != 0 && !TypefaceHelper.isMediumWeightSupported()) {
                 p.setStrokeWidth(0.65f);
                 p.setStyle(Paint.Style.FILL_AND_STROKE);
             }
-            if ((flags & FLAG_STYLE_ITALIC) != 0 && !TypefaceHelper.isItalicSupported()) {
+            if (!header && (flags & FLAG_STYLE_ITALIC) != 0 && !TypefaceHelper.isItalicSupported()) {
                 p.setTextSkewX(-0.25f);
             }
 
@@ -95,9 +95,9 @@ public class TextStyleSpan extends MetricAffectingSpan {
         public Typeface getTypeface() {
             if (header) {
                 if ((flags & FLAG_STYLE_ITALIC) != 0) {
-                    return AndroidUtilities.getTypeface("fonts/mw_bolditalic.ttf");
+                    return AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM_ITALIC);
                 }
-                return AndroidUtilities.getTypeface("fonts/mw_bold.ttf");
+                return AndroidUtilities.bold();
             }
             if ((flags & FLAG_STYLE_MONO) != 0 || (flags & FLAG_STYLE_CODE) != 0) {
                 return Typeface.MONOSPACE;

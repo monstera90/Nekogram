@@ -346,7 +346,7 @@ public class ChatAttachAlertRichLayout extends ChatAttachAlert.AttachAlertLayout
 
     private void addHeadingItem(ItemOptions headers, BlockRow row, TL_iv.PageBlock block, int icon, String label, int textSize, ItemOptions root) {
         headers.addChecked(row != null && row.block.getClass() == block.getClass(), icon, label, () -> { listView.turnIntoKeepList(row, block); root.dismiss(); });
-        headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+        headers.getLast().textView.setTypeface(AndroidUtilities.bold());
         headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
     }
 

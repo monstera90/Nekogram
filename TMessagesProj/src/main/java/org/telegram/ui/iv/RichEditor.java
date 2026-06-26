@@ -676,27 +676,27 @@ public class RichEditor extends BaseFragment implements NotificationCenter.Notif
             headers.addGap();
 
             headers.addChecked(row != null && row.block instanceof TL_iv.pageBlockHeading1, R.drawable.iv_h1, getString(R.string.ArticleHeading1), () -> { listView.turnIntoKeepList(row, new TL_iv.pageBlockHeading1()); o.dismiss(); });
-            headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            headers.getLast().textView.setTypeface(AndroidUtilities.bold());
             headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, SharedConfig.fontSize + 2);
 
             headers.addChecked(row != null && row.block instanceof TL_iv.pageBlockHeading2, R.drawable.iv_h2, getString(R.string.ArticleHeading2), () -> { listView.turnIntoKeepList(row, new TL_iv.pageBlockHeading2()); o.dismiss(); });
-            headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            headers.getLast().textView.setTypeface(AndroidUtilities.bold());
             headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, SharedConfig.fontSize + 1);
 
             headers.addChecked(row != null && row.block instanceof TL_iv.pageBlockHeading3, R.drawable.iv_h3, getString(R.string.ArticleHeading3), () -> { listView.turnIntoKeepList(row, new TL_iv.pageBlockHeading3()); o.dismiss(); });
-            headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            headers.getLast().textView.setTypeface(AndroidUtilities.bold());
             headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, SharedConfig.fontSize);
 
             headers.addChecked(row != null && row.block instanceof TL_iv.pageBlockHeading4, R.drawable.iv_h4, getString(R.string.ArticleHeading4), () -> { listView.turnIntoKeepList(row, new TL_iv.pageBlockHeading4()); o.dismiss(); });
-            headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            headers.getLast().textView.setTypeface(AndroidUtilities.bold());
             headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, SharedConfig.fontSize - 1);
 
             headers.addChecked(row != null && row.block instanceof TL_iv.pageBlockHeading5, R.drawable.iv_h5, getString(R.string.ArticleHeading5), () -> { listView.turnIntoKeepList(row, new TL_iv.pageBlockHeading5()); o.dismiss(); });
-            headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            headers.getLast().textView.setTypeface(AndroidUtilities.bold());
             headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, SharedConfig.fontSize - 2);
 
             headers.addChecked(row != null && row.block instanceof TL_iv.pageBlockHeading6, R.drawable.iv_h6, getString(R.string.ArticleHeading6), () -> { listView.turnIntoKeepList(row, new TL_iv.pageBlockHeading6()); o.dismiss(); });
-            headers.getLast().textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+            headers.getLast().textView.setTypeface(AndroidUtilities.bold());
             headers.getLast().textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, SharedConfig.fontSize - 3);
 
             o.addChecked(row != null && RichEditorListView.isHeading(row.block), new RequiresPremiumDrawable(context, R.drawable.iv_h).setPremium(premiumLock).setCutoutColorKey(Theme.key_actionBarDefaultSubmenuBackground), getString(R.string.ArticleHeading), () -> o.openSwipeback(headers));
