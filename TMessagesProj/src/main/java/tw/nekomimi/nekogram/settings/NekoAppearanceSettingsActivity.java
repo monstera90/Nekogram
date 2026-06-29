@@ -21,7 +21,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.EmojiHelper;
 import tw.nekomimi.nekogram.helpers.PopupHelper;
 
-public class NekoAppearanceSettingsActivity extends BaseNekoSettingsActivity implements NotificationCenter.NotificationCenterDelegate {
+public class NekoAppearanceSettingsActivity extends BaseNekoSettingsActivity {
 
     private final int emojiSetsRow = rowId++;
     private final int predictiveBackAnimationRow = rowId++;
@@ -39,25 +39,6 @@ public class NekoAppearanceSettingsActivity extends BaseNekoSettingsActivity imp
     private final int tabsPositionRow = rowId++;
 
     private final int strokeOnViewsRow = rowId++;
-
-    @Override
-    public boolean onFragmentCreate() {
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
-        return super.onFragmentCreate();
-    }
-
-    @Override
-    public void onFragmentDestroy() {
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
-        super.onFragmentDestroy();
-    }
-
-    @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiLoaded && listView != null) {
-            notifyItemChanged(emojiSetsRow, PARTIAL);
-        }
-    }
 
     @Override
     protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
