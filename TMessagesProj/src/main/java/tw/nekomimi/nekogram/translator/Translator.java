@@ -143,10 +143,10 @@ public class Translator {
         var currentTargetLanguage = stripLanguageCode(getCurrentTargetLanguage());
         var languages = restrictedLanguages.stream().filter(s -> !s.equals(currentTargetLanguage)).collect(Collectors.toSet());
         if (!restrictedLanguages.isEmpty() && languages.isEmpty()) {
-            NekoConfig.saveRestrictedLanguages(null);
+            NekoConfig.setRestrictedLanguages(null);
             return;
         }
-        NekoConfig.saveRestrictedLanguages(new HashSet<>(restrictedLanguages));
+        NekoConfig.setRestrictedLanguages(new HashSet<>(restrictedLanguages));
     }
 
     public static Pair<ArrayList<String>, ArrayList<String>> getProviders() {
