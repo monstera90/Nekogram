@@ -1130,7 +1130,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         windowView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         windowView.setOnApplyWindowInsetsListener((v, insets) -> {
             final WindowInsetsCompat insetsCompat = WindowInsetsCompat.toWindowInsetsCompat(insets, v);
-            final androidx.core.graphics.Insets navInsets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars());
+            final androidx.core.graphics.Insets navInsets = insetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars());
             this.navInsets.set(navInsets.left, navInsets.top, navInsets.right, navInsets.bottom);
             final androidx.core.graphics.Insets cutoutInsets = insetsCompat.getInsets(WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.systemBars());
             this.insets.set(
