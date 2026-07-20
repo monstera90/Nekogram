@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "921793833622",
+    "project_id": "my-nekogram",
+    "storage_bucket": "my-nekogram.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921793833622:android:224862dfce6458db1030b7",
+        "android_client_info": {
+          "package_name": "tw.nekomimi.nekogram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN6paTD_067DxfWgr1kaKjLipJOse1KyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
