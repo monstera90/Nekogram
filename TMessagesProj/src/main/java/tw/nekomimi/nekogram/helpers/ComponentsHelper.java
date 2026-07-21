@@ -20,8 +20,28 @@ public class ComponentsHelper {
     public static void fixComponents(Context context) {
         var pm = context.getPackageManager();
         for (var cls : COMPONENTS) {
-            var component = new ComponentName(context, cls);
             try {
+                var component = new ComponentName(context, cls);
+                // Check if component exists before trying to modify it
+                try {
+                    pm.getActivityInfo(component, 0);
+                } catch (Exception e1) {
+                    try {
+                        pm.getServiceInfo(component, 0);
+                    } catch (Exception e2) {
+                        try {
+                            pm.getReceiverInfo(component, 0);
+                        } catch (Exception e3) {
+                            try {
+                                pm.getProviderInfo(component, 0);
+                            } catch (Exception e4) {
+                                FileLog.d("Component not found, skipping: " + cls);
+                                continue;
+                            }
+                        }
+                    }
+                }
+                
                 var state = pm.getComponentEnabledSetting(component);
                 if (state != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) {
                     FileLog.d("Fixing component: " + cls + ", old state = " + state);
