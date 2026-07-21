@@ -13,12 +13,7 @@
           "package_name": "tw.nekomimi.nekogram"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "921793833622-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyCN6paTD_067DxfWgr1kaKjLipJOse1KyU"
