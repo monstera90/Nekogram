@@ -6,8 +6,8 @@ import tw.nekomimi.nekogram.helpers.UserHelper;
 
 public class Extra {
 
-    public static int APP_ID = 38093981;
-    public static String APP_HASH = "47ca2f2e0c2b21dce00bbab46e9d2bd5";
+    public static int APP_ID = BuildConfig.API_ID;
+    public static String APP_HASH = BuildConfig.API_HASH;
     public static String SENDER_ID = "921793833622";
     public static String SENTRY_DSN = BuildConfig.SENTRY_DSN;
 
