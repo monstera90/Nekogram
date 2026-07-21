@@ -24,7 +24,11 @@ android {
     }
 
     signingConfigs {
-        if (localProperties.getProperty("storeFile") != null) {
+        // Only use release signing if keystore is properly configured
+        if (localProperties.getProperty("storeFile") != null &&
+            localProperties.getProperty("storePassword") != null &&
+            localProperties.getProperty("keyAlias") != null &&
+            localProperties.getProperty("keyPassword") != null) {
             sign {
                 storeFile file(localProperties.getProperty("storeFile"))
                 storePassword localProperties.getProperty("storePassword")
@@ -43,7 +47,9 @@ android {
         }
 
         release {
-            minifyEnabled true
+            // TEMPORARILY disable minifyEnabled to test if ProGuard is the issue
+            // Set back to true after confirming the app works
+            minifyEnabled false
             shrinkResources false
             vcsInfo.include false
             if (localProperties.getProperty("storeFile") != null) {
