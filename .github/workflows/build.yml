@@ -52,7 +52,7 @@ jobs:
           echo "apiHash=${{ secrets.API_HASH }}" >> local.properties
           echo "helperBotUsername=${{ secrets.HELPER_BOT_USERNAME }}" >> local.properties
           echo "mapsApiKey=${{ secrets.MAPS_API_KEY }}" >> local.properties
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > "${{ github.workspace }}/release.keystore"
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode --ignore-garbage > "${{ github.workspace }}/release.keystore"
           echo "storeFile=${{ github.workspace }}/release.keystore" >> local.properties
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> local.properties
           echo "keyAlias=${{ secrets.KEYSTORE_ALIAS }}" >> local.properties
