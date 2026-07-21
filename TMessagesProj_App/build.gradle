@@ -1,48 +1,101 @@
+import com.android.build.api.variant.FilterConfiguration
+
 plugins {
-    id 'com.android.application' version '9.3.0' apply false
-    id 'com.google.gms.google-services' version '4.5.0' apply false
-    id 'io.sentry.android.gradle' version '6.14.0' apply false
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
-subprojects {
-    afterEvaluate {
-        if (plugins.hasPlugin("com.android.library") ||
-                plugins.hasPlugin("com.android.application")) {
-            android {
-                compileSdkVersion 37
-                buildToolsVersion "37.0.0"
-                ndkVersion "27.3.13750724"
+dependencies {
+    implementation project(':TMessagesProj')
+}
 
-                lint {
-                    checkReleaseBuilds false
-                    disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
-                }
+android {
+    defaultConfig.applicationId = APP_PACKAGE
 
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_21
-                    targetCompatibility JavaVersion.VERSION_21
+    packagingOptions {
+        resources {
+            excludes += '**'
+        }
+    }
 
-                    coreLibraryDesugaringEnabled true
-                }
+    Properties localProperties = new Properties()
+    if (project.rootProject.file('local.properties').exists()) {
+        localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+    }
 
-                defaultConfig {
-                    minSdkVersion 23
-                    targetSdkVersion 37
-                }
-
-                buildTypes {
-                    play {
-                        initWith release
-                    }
-                }
-
-                buildFeatures.buildConfig = true
-            }
-
-            dependencies {
-                coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.5'
+    signingConfigs {
+        if (localProperties.getProperty("storeFile") != null) {
+            sign {
+                storeFile file(localProperties.getProperty("storeFile"))
+                storePassword localProperties.getProperty("storePassword")
+                keyAlias localProperties.getProperty("keyAlias")
+                keyPassword localProperties.getProperty("keyPassword")
             }
         }
     }
+
+    buildTypes {
+        debug {
+            if (localProperties.getProperty("storeFile") != null) {
+                signingConfig signingConfigs.sign
+            }
+            applicationIdSuffix ".beta"
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources false
+            vcsInfo.include false
+            if (localProperties.getProperty("storeFile") != null) {
+                signingConfig signingConfigs.sign
+            } else {
+                signingConfig signingConfigs.debug
+            }
+            proguardFiles '../TMessagesProj/proguard-rules.pro'
+            ndk.debugSymbolLevel 'FULL'
+        }
+    }
+
+    defaultConfig.versionCode = Integer.parseInt(APP_VERSION_CODE)
+
+    defaultConfig {
+        versionName APP_VERSION_NAME
+
+        multiDexEnabled true
+
+        manifestPlaceholders = [MAPS_API_KEY: localProperties.get("mapsApiKey", "")]
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
+    splits.abi {
+        var buildingBundle = gradle.startParameter.taskNames.any { it.startsWith("bundle") }
+        enable !buildingBundle
+        universalApk true
+
+        reset()
+        include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+    }
+    namespace 'org.telegram.messenger.regular'
+
+    dependenciesInfo {
+        includeInApk false
+        includeInBundle false
+    }
 }
 
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.each { output ->
+            def abi = output.filters.find { it.filterType == FilterConfiguration.FilterType.ABI }?.identifier
+            def abiName = abi ?: "universal"
+            def baseVersionCode = output.versionCode.get()
+            output.outputFileName.set("Nekogram-${output.versionName.get()}-${baseVersionCode}-${abiName}.apk")
+            output.versionCode.set(baseVersionCode * 10)
+        }
+    }
+}
