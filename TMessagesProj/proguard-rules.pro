@@ -109,6 +109,30 @@
   *** next;
 }
 
+# Since Unsafe is using the field offsets of these inner classes, we don't-keep class com.huawei.updatesdk.**{ *; }
+-keep class com.huawei.hms.**{ *; }
+
+# Don't warn about checkerframework and Kotlin annotations
+-dontwarn org.checkerframework.**
+-dontwarn javax.annotation.**
+
+-keep class io.nano.tex.** {*;}
+
+# JLatexMath: macro/atom classes are loaded reflectively by Class.forName
+-keep class org.scilab.forge.jlatexmath.** { *; }
+-keep class ru.noties.jlatexmath.** { *; }
+-dontwarn org.scilab.forge.jlatexmath.**
+
+
+# Used by AtomicReferenceFieldUpdater and sun.misc.Unsafe
+-keepclassmembers class com.google.common.util.concurrent.AbstractFuture** {
+  *** waiters;
+  *** value;
+  *** listeners;
+  *** thread;
+  *** next;
+}
+
 # Since Unsafe is using the field offsets of these inner classes, we don't want
 # to have class merging or similar tricks applied to these classes and their
 # fields. It's safe to allow obfuscation, since the by-name references are
@@ -172,3 +196,25 @@
 
 -dontwarn android.support.annotation.*
 -dontwarn androidx.compose.**
+
+# ============================================
+# Nekogram specific classes - prevent ProGuard from removing/obfuscating
+# ============================================
+-keep class tw.nekomimi.nekogram.FirebaseFix { *; }
+-keep class tw.nekomimi.nekogram.helpers.AnalyticsHelper { *; }
+-keep class tw.nekomimi.nekogram.helpers.ComponentsHelper { *; }
+-keep class tw.nekomimi.nekogram.NekoConfig { *; }
+-keep class tw.nekomimi.nekogram.** { *; }
+
+# Firebase services - keep all
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class com.google.android.gms.common.ConnectionResult { *; }
+-keep class com.google.android.gms.common.GooglePlayServicesUtil { *; }
+
+# Prevent stripping of Firebase initialization
+-keep class com.google.android.gms.common.annotation.KeepName { *; }
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+}
