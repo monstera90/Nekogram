@@ -57,16 +57,11 @@ jobs:
           echo "apiId=${{ secrets.API_ID }}" >> local.properties
           echo "apiHash=${{ secrets.API_HASH }}" >> local.properties
           echo "helperBotUsername=${{ secrets.HELPER_BOT_USERNAME }}" >> local.properties
-          echo "sentryDsn=${{ secrets.SENTRY_DSN }}" >> local.properties
           echo "mapsApiKey=${{ secrets.MAPS_API_KEY }}" >> local.properties
-
-          echo "${{ secrets.SENTRY_PROPERTIES }}" | base64 --decode > sentry.properties
 
       - name: Build with Gradle
         run: |
           ./gradlew assembleRelease
-          ./gradlew bundlePlay
-          ./gradlew sentryUploadSourceBundlePlay
 
       - name: Attest
         uses: actions/attest@v4
@@ -108,10 +103,3 @@ jobs:
         with:
           path: TMessagesProj_App/build/outputs/apk/release/*-x86_64.apk
           archive: false
-
-      - name: Upload build bundle
-        uses: actions/upload-artifact@v7
-        with:
-          path: TMessagesProj_App/build/outputs/bundle/play/*-play.aab
-          archive: false
-
