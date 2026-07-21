@@ -87,7 +87,12 @@ public class ApplicationLoader extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        FirebaseFix.check(base);
+        // Wrap FirebaseFix.check() in try-catch to prevent SIGKILL on initialization failure
+        try {
+            FirebaseFix.check(base);
+        } catch (Throwable e) {
+            android.util.Log.e("ApplicationLoader", "FirebaseFix.check() failed", e);
+        }
     }
 
     public static ILocationServiceProvider getLocationServiceProvider() {
@@ -300,7 +305,12 @@ public class ApplicationLoader extends Application {
 
         super.onCreate();
 
-        AnalyticsHelper.start(this);
+        // Wrap AnalyticsHelper.start() in try-catch to prevent crash on initialization failure
+        try {
+            AnalyticsHelper.start(this);
+        } catch (Throwable e) {
+            android.util.Log.e("ApplicationLoader", "AnalyticsHelper.start() failed", e);
+        }
         ComponentsHelper.fixComponents(this);
 
         if (BuildVars.LOGS_ENABLED) {
@@ -696,6 +706,8 @@ public class ApplicationLoader extends Application {
     public boolean onPause() {
         return false;
     }
+
+    public }
 
     public BaseFragment openSettings(int n) {
         return null;
