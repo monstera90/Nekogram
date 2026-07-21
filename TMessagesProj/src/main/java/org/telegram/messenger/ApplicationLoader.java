@@ -87,7 +87,6 @@ public class ApplicationLoader extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        // Wrap FirebaseFix.check() in try-catch to prevent SIGKILL on initialization failure
         try {
             FirebaseFix.check(base);
         } catch (Throwable e) {
@@ -305,7 +304,6 @@ public class ApplicationLoader extends Application {
 
         super.onCreate();
 
-        // Wrap AnalyticsHelper.start() in try-catch to prevent crash on initialization failure
         try {
             AnalyticsHelper.start(this);
         } catch (Throwable e) {
@@ -706,8 +704,6 @@ public class ApplicationLoader extends Application {
     public boolean onPause() {
         return false;
     }
-
-    public }
 
     public BaseFragment openSettings(int n) {
         return null;
