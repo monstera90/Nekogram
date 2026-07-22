@@ -49,7 +49,6 @@ import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.FirebaseFix;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.AnalyticsHelper;
 import tw.nekomimi.nekogram.helpers.ComponentsHelper;
@@ -88,8 +87,7 @@ public class ApplicationLoader extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         try {
-            FirebaseFix.check(base);
-        } catch (Throwable e) {
+            } catch (Throwable e) {
             android.util.Log.e("ApplicationLoader", "FirebaseFix.check() failed", e);
         }
     }

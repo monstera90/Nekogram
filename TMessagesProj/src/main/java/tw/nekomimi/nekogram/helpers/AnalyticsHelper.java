@@ -2,11 +2,6 @@ package tw.nekomimi.nekogram.helpers;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
-
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -24,8 +19,6 @@ import tw.nekomimi.nekogram.Extra;
 
 public class AnalyticsHelper {
     private static SharedPreferences preferences;
-
-    private static FirebaseAnalytics firebaseAnalytics;
 
     public static boolean sendBugReport = true;
     public static boolean analyticsDisabled = false;
