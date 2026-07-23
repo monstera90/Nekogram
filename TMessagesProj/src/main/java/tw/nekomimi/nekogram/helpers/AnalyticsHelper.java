@@ -36,20 +36,9 @@ public class AnalyticsHelper {
         if (userId == null || userId.length() < 32) {
             preferences.edit().putString("userId", userId = generateUserID()).apply();
         }
-        
-        // Wrap Firebase Analytics initialization
-        try {
-            firebaseAnalytics = FirebaseAnalytics.getInstance(application);
-            firebaseAnalytics.setAnalyticsCollectionEnabled(true);
-            firebaseAnalytics.setUserId(userId);
-        } catch (Throwable e) {
-            FileLog.e("FirebaseAnalytics initialization failed", e);
-            firebaseAnalytics = null;
-        }
-        
-        // DISABLE Sentry initialization completely for now
-        // If SENTRY_DSN is set, it may cause native crashes during init
-        /*
+
+        // Firebase Analytics removed entirely - no telemetry is sent anywhere.
+
         if (Extra.SENTRY_DSN != null && !Extra.SENTRY_DSN.isEmpty()) {
             try {
                 SentryAndroid.init(application, options -> {
@@ -66,10 +55,9 @@ public class AnalyticsHelper {
                 user.setId(userId);
                 Sentry.setUser(user);
             } catch (Throwable e) {
-                FileLog.e("Sentry initialization failed", e);
+                FileLog.e(e);
             }
         }
-        */
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("Analytics: userId = " + userId);
@@ -82,7 +70,7 @@ public class AnalyticsHelper {
 
     public static void trackFragmentLifecycle(String lifecycle, BaseFragment fragment) {
         if (analyticsDisabled || fragment == null) return;
-        /*
+        if (Extra.SENTRY_DSN == null || Extra.SENTRY_DSN.isEmpty()) return;
         var breadcrumb = new Breadcrumb();
         breadcrumb.setType("navigation");
         breadcrumb.setCategory("ui.fragment.lifecycle");
@@ -90,10 +78,6 @@ public class AnalyticsHelper {
         breadcrumb.setData("state", lifecycle);
         breadcrumb.setData("screen", getFragmentName(fragment));
         Sentry.addBreadcrumb(breadcrumb);
-        */
-        if ("created".equals(lifecycle) && firebaseAnalytics != null) {
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, null);
-        }
     }
 
     private static String getFragmentName(BaseFragment fragment) {
@@ -102,12 +86,7 @@ public class AnalyticsHelper {
     }
 
     public static void trackEvent(String event, HashMap<String, String> map) {
-        if (analyticsDisabled || firebaseAnalytics == null) return;
-        Bundle bundle = new Bundle();
-        for (String key : map.keySet()) {
-            bundle.putString(key, map.get(key));
-        }
-        firebaseAnalytics.logEvent(event, bundle);
+        // Firebase Analytics removed; events are no longer sent anywhere.
     }
 
     public static boolean isSettingsAvailable() {
@@ -117,9 +96,6 @@ public class AnalyticsHelper {
     public static void setAnalyticsDisabled() {
         AnalyticsHelper.analyticsDisabled = true;
         if (BuildConfig.DEBUG) return;
-        if (firebaseAnalytics != null) {
-            firebaseAnalytics.setAnalyticsCollectionEnabled(false);
-        }
         preferences.edit().putBoolean("analyticsDisabled", true).apply();
     }
 
