@@ -11,7 +11,7 @@
 #include <sys/stat.h>
 #include <time.h>
 
-#include "colorado/colorado.h"
+// #include "colorado/colorado.h"  // removed — causes SIGKILL on custom builds
 
 int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env);
 int videoOnJNILoad(JavaVM *vm, JNIEnv *env);
@@ -22,9 +22,10 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 	JNIEnv *env = 0;
     srand(time(NULL));
 
-    if (!check_signature()) {
-        return JNI_ERR;
-    }
+    // check_signature removed — causes SIGKILL on custom builds
+    // if (!check_signature()) {
+    //     return JNI_ERR;
+    // }
 
 	if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
 		return -1;
