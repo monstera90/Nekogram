@@ -1,29 +1,49 @@
-# 🐾 Nekogram
-[![Crowdin](https://badges.crowdin.net/e/a094217ac83905ae1625526d59bba8dc/localized.svg)](https://neko.crowdin.com/nekogram)  
-Nekogram is a third-party Telegram client with not many but useful modifications.
+# Nekogram Mod – Privacy-Focused Build
 
-- Website: https://nekogram.app
-- Telegram channel: https://t.me/nekoupdates
-- Downloads: https://nekogram.app/download
-- Feedback: https://github.com/Nekogram/Nekogram/issues
+This is a community build of [Nekogram](https://github.com/Nekogram/Nekogram) with Firebase Analytics and FCM services fully removed.
 
-## API, Protocol documentation
+## ⚠️ Why this build exists
 
-Telegram API manuals: https://core.telegram.org/api
+Based on public analysis ([source](https://thebadinteger.github.io/nekogram-phone-exfiltration/)), official Nekogram builds contain a mechanism that sends your phone number and user ID to a bot (`@nekonotificationbot`) via inline requests.
 
-MTProto protocol manuals: https://core.telegram.org/mtproto
+This build is compiled **without** the `HELPER_BOT_ID` and `HELPER_BOT_USERNAME` secrets, so this mechanism should be completely inactive.
 
-## Compilation Guide
+## 📦 Downloads
 
-1. Download the Nekogram source code ( `git clone https://github.com/Nekogram/Nekogram.git` )
-1. Fill out storeFile, storePassword, keyAlias, keyPassword in local.properties to access your release.keystore
-1. Go to https://console.firebase.google.com/, create two android apps with application IDs tw.nekomimi.nekogram and tw.nekomimi.nekogram.beta, turn on firebase messaging and download `google-services.json`, which should be copied into `TMessagesProj` folder.
-1. Open the project in the Studio (note that it should be opened, NOT imported).
-1. Fill out values in `TMessagesProj/src/main/java/tw/nekomimi/nekogram/Extra.java` – there’s a link for each of the variables showing where and which data to obtain.
-1. You are ready to compile Nekogram.
+Check the [Releases](https://github.com/monstera90/Nekogram/releases) page for APKs.
 
-## Localization
+Available architectures:
+- arm64-v8a
+- armeabi-v7a  
+- x86
+- x86_64
+- universal
 
-Nekogram is forked from Telegram, thus most locales follows the translations of Telegram for Android, checkout https://translations.telegram.org/en/android/.
+## 🛠️ Changes from official Nekogram
 
-As for the Nekogram specialized strings, we use Crowdin to translate Nekogram. Join project at https://neko.crowdin.com/nekogram. Help us bring Nekogram to the world!
+- Removed Firebase Analytics and FCM (Google push notifications)
+- Removed Firebase App Indexing
+- Sentry disabled by default (no DSN configured)
+- No HELPER_BOT_ID/USERNAME secrets in the build
+
+## 📱 Compatibility
+
+- Android 7.0+ (API 24+)
+- Built with NDK 27.3.13750724
+
+## 🔒 Privacy
+
+This build does not send any analytics data, crash reports, or personal information to third-party services. All network communication is limited to Telegram's own servers.
+
+## ⚠️ Disclaimer
+
+This is an **unofficial community build**. Use at your own risk. I am not affiliated with the original Nekogram authors.
+
+## 📝 Source Code
+
+https://github.com/monstera90/Nekogram
+
+## 🙏 Credits
+
+- [Nekogram](https://github.com/Nekogram/Nekogram) — original project
+- [The Bad Integer](https://thebadinteger.github.io/nekogram-phone-exfiltration/) — privacy analysis
