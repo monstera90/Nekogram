@@ -79,6 +79,15 @@ public class ApplicationLoader extends Application {
     public static boolean canDrawOverlays;
     public static volatile long mainInterfacePausedStageQueueTime;
 
+    private static void writeBreadcrumb(String step) {
+        try {
+            java.io.File f = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "nekogram_breadcrumb_" + step + ".txt");
+            java.io.FileWriter w = new java.io.FileWriter(f);
+            w.write(step + " at " + System.currentTimeMillis());
+            w.close();
+        } catch (Throwable ignore) {}
+    }
+
     private static PushListenerController.IPushListenerServiceProvider pushProvider;
     private static IMapsProvider mapsProvider;
     private static ILocationServiceProvider locationServiceProvider;
@@ -353,13 +362,16 @@ public class ApplicationLoader extends Application {
         }
 
         super.onCreate();
+        writeBreadcrumb("step_3_after_super_oncreate");
 
         try {
             AnalyticsHelper.start(this);
         } catch (Throwable e) {
             android.util.Log.e("ApplicationLoader", "AnalyticsHelper.start() failed", e);
         }
+        writeBreadcrumb("step_4_after_analytics");
         ComponentsHelper.fixComponents(this);
+        writeBreadcrumb("step_5_after_components");
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app start time = " + (startTime = SystemClock.elapsedRealtime()));
@@ -397,6 +409,7 @@ public class ApplicationLoader extends Application {
         } catch (UnsatisfiedLinkError error) {
             throw new RuntimeException("can't load native libraries " +  Build.CPU_ABI + " lookup folder " + NativeLoader.getAbiFolder());
         }
+        writeBreadcrumb("step_7_after_connections_manager");
         new ForegroundDetector(this) {
             @Override
             public void onActivityStarted(Activity activity) {
@@ -407,17 +420,23 @@ public class ApplicationLoader extends Application {
                 }
             }
         };
+        writeBreadcrumb("step_8_after_foreground_detector");
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("load libs time = " + (SystemClock.elapsedRealtime() - startTime));
         }
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
+        writeBreadcrumb("step_9_after_handler");
 
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
+        writeBreadcrumb("step_10_before_countdown");
         countDownLatch.countDown();
+        writeBreadcrumb("step_11_after_countdown");
 
         LauncherIconController.tryFixLauncherIconIfNeeded();
+        writeBreadcrumb("step_12_after_launcher_icon");
         ProxyRotationController.init();
+        writeBreadcrumb("step_13_oncreate_complete");
     }
 
     public static void startPushService() {
