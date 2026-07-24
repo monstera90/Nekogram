@@ -79,15 +79,6 @@ public class ApplicationLoader extends Application {
     public static boolean canDrawOverlays;
     public static volatile long mainInterfacePausedStageQueueTime;
 
-    private static void writeBreadcrumb(String step) {
-        try {
-            java.io.File f = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "nekogram_breadcrumb_" + step + ".txt");
-            java.io.FileWriter w = new java.io.FileWriter(f);
-            w.write(step + " at " + System.currentTimeMillis());
-            w.close();
-        } catch (Throwable ignore) {}
-    }
-
     private static PushListenerController.IPushListenerServiceProvider pushProvider;
     private static IMapsProvider mapsProvider;
     private static ILocationServiceProvider locationServiceProvider;
@@ -299,58 +290,6 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
-        // --- BREADCRUMB: proves onCreate() actually started ---
-        try {
-            if (android.os.Build.VERSION.SDK_INT >= 29) {
-                android.content.ContentValues values = new android.content.ContentValues();
-                values.put(android.provider.MediaStore.Downloads.DISPLAY_NAME, "nekogram_oncreate_started.txt");
-                values.put(android.provider.MediaStore.Downloads.MIME_TYPE, "text/plain");
-                values.put(android.provider.MediaStore.Downloads.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS);
-                android.net.Uri uri = getContentResolver().insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-                if (uri != null) {
-                    try (java.io.OutputStream os = getContentResolver().openOutputStream(uri)) {
-                        if (os != null) {
-                            os.write(("onCreate started: " + new java.util.Date()).getBytes("UTF-8"));
-                        }
-                    }
-                }
-            }
-        } catch (Throwable ignored) {
-        }
-        // --- END BREADCRUMB ---
-
-        final Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            try {
-                String text;
-                {
-                    java.io.StringWriter sw = new java.io.StringWriter();
-                    java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-                    pw.println("Crash time: " + new java.util.Date());
-                    pw.println("Thread: " + thread);
-                    throwable.printStackTrace(pw);
-                    pw.flush();
-                    text = sw.toString();
-                }
-                if (android.os.Build.VERSION.SDK_INT >= 29) {
-                    android.content.ContentValues values = new android.content.ContentValues();
-                    values.put(android.provider.MediaStore.Downloads.DISPLAY_NAME, "nekogram_crash_log.txt");
-                    values.put(android.provider.MediaStore.Downloads.MIME_TYPE, "text/plain");
-                    values.put(android.provider.MediaStore.Downloads.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS);
-                    android.net.Uri uri = getContentResolver().insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-                    if (uri != null) {
-                        try (java.io.OutputStream os = getContentResolver().openOutputStream(uri)) {
-                            if (os != null) os.write(text.getBytes("UTF-8"));
-                        }
-                    }
-                }
-            } catch (Throwable ignored) {
-            }
-            if (defaultHandler != null) {
-                defaultHandler.uncaughtException(thread, throwable);
-            }
-        });
-
         applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
@@ -359,16 +298,13 @@ public class ApplicationLoader extends Application {
         }
 
         super.onCreate();
-        writeBreadcrumb("step_3_after_super_oncreate");
 
         try {
             AnalyticsHelper.start(this);
         } catch (Throwable e) {
             android.util.Log.e("ApplicationLoader", "AnalyticsHelper.start() failed", e);
         }
-        writeBreadcrumb("step_4_after_analytics");
         ComponentsHelper.fixComponents(this);
-        writeBreadcrumb("step_5_after_components");
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app start time = " + (startTime = SystemClock.elapsedRealtime()));
@@ -413,7 +349,6 @@ public class ApplicationLoader extends Application {
         } catch (UnsatisfiedLinkError error) {
             throw new RuntimeException("can't load native libraries " +  Build.CPU_ABI + " lookup folder " + NativeLoader.getAbiFolder());
         }
-        writeBreadcrumb("step_7_after_connections_manager");
         new ForegroundDetector(this) {
             @Override
             public void onActivityStarted(Activity activity) {
@@ -424,23 +359,17 @@ public class ApplicationLoader extends Application {
                 }
             }
         };
-        writeBreadcrumb("step_8_after_foreground_detector");
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("load libs time = " + (SystemClock.elapsedRealtime() - startTime));
         }
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        writeBreadcrumb("step_9_after_handler");
 
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
-        writeBreadcrumb("step_10_before_countdown");
         countDownLatch.countDown();
-        writeBreadcrumb("step_11_after_countdown");
 
         LauncherIconController.tryFixLauncherIconIfNeeded();
-        writeBreadcrumb("step_12_after_launcher_icon");
         ProxyRotationController.init();
-        writeBreadcrumb("step_13_oncreate_complete");
     }
 
     public static void startPushService() {

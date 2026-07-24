@@ -48,7 +48,7 @@ android {
         release {
             // TEMPORARILY disable minifyEnabled to test if ProGuard is the issue
             // Set back to true after confirming the app works
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
             vcsInfo.include false
             if (localProperties.getProperty("storeFile") != null) {
