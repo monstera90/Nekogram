@@ -335,14 +335,7 @@ public class ApplicationLoader extends Application {
             applicationContext = getApplicationContext();
         }
 
-        writeBreadcrumb("step_5_5_before_native_loader");
-        try {
-            NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
-            writeBreadcrumb("step_5_6_after_native_loader_success");
-        } catch (Throwable e) {
-            writeBreadcrumb("step_5_6_after_native_loader_error_" + e.getClass().getSimpleName());
-            android.util.Log.e("ApplicationLoader", "NativeLoader.initNativeLibs failed", e);
-        }
+        NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
 
         try {
             ConnectionsManager.native_setJava(false);
