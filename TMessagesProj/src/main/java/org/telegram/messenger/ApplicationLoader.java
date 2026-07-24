@@ -95,10 +95,7 @@ public class ApplicationLoader extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        try {
-            } catch (Throwable e) {
-            android.util.Log.e("ApplicationLoader", "FirebaseFix.check() failed", e);
-        }
+        // FirebaseFix removed — not needed without Firebase
     }
 
     public static ILocationServiceProvider getLocationServiceProvider() {
